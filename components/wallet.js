@@ -6,8 +6,6 @@ import WalletConnectProvider from '@walletconnect/web3-provider'
 import WalletLink from 'walletlink'
 import Fortmatic from 'fortmatic'
 import Portis from '@portis/web3'
-import Authereum from 'authereum'
-import ethProvider from 'eth-provider'
 import { Bitski } from 'bitski'
 import { actionTypes } from '../store'
 
@@ -51,12 +49,6 @@ const providerOptions = {
     options: {
       id: process.env.NEXT_PUBLIC_PORTIS_ID
     },
-  },
-  authereum: {
-    package: Authereum,
-  },
-  frame: {
-    package: ethProvider,
   },
   bitski: {
     package: Bitski,
@@ -115,9 +107,23 @@ export default function Wallet() {
 
   useEffect(() => {
     if (provider?.on) {
-      const handleChainChanged = chainId => dispatch({ type: actionTypes.WALLET, payload: { chain_id: parseInt(chainId) } })
+      const handleChainChanged = chainId => {
+        if (!chainId) {
+          disconnect()
+        }
+        else {
+          dispatch({ type: actionTypes.WALLET, payload: { chain_id: parseInt(chainId) } })
+        }
+      }
 
-      const handleAccountsChanged = accounts => dispatch({ type: actionTypes.WALLET, payload: { address: accounts[0] } })
+      const handleAccountsChanged = accounts => {
+        if (!accounts[0]) {
+          disconnect()
+        }
+        else {
+          dispatch({ type: actionTypes.WALLET, payload: { address: accounts[0] } })
+        }
+      }
 
       const handleDisconnect = ({ code }) => {
         disconnect()
