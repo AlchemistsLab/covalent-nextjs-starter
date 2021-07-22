@@ -5,11 +5,12 @@ import Layout from '../components/layout'
 import ImageWithFallback from '../components/imageWithFallback'
 import utilStyles from '../styles/utils.module.css'
 import { getTokenBalancesData } from '../lib/class-a'
+import { actionTypes } from '../store'
 import _ from 'lodash'
 import NumberFormat from 'react-number-format'
 
 export default function Assets() {
-  const wallet = useSelector(state => state.wallet)
+  const wallet = useSelector(state => state[actionTypes.WALLET])
   const [balancesData, setBalancesData] = useState([])
 
   useEffect(() => {
